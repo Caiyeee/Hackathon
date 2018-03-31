@@ -9,42 +9,57 @@ import java.util.List;
  */
 
 public class Person {
+    private int id;
     private String name;
-    private ArrayList<String> tags_init;
-    private ArrayList<HashMap<String,List<String>>> tags_add;
+    private String tags_init;
+    private String tags_add;
 
-    public Person(String name, ArrayList<String> tags_init){
-        this.name = name;
-        if(!tags_init.isEmpty()){
-            for(int i=0; i<tags_init.size(); i++)
-                this.tags_init.add(tags_init.get(i));
-        }
+    public Person(int id,String name, String tags_init){
+        if(!name.isEmpty())
+            this.name = name;
+        else
+            this.name = "";
+
+        if(!tags_init.isEmpty())
+            this.tags_init = tags_init;
+        else
+            this.tags_init = "";
+
+        this.tags_add = "";
     }
+    public Person(){
+        this.id = -1;
+        this.name = "";
+        this.tags_init = "";
+        this.tags_add = "";
+    }
+
     //get函数
+    public int getId() { return id; }
     public String getName(){
         return name;
     }
-    public ArrayList<String> getTags_init(){
+    public String getTags_init(){
         return tags_init;
     }
-    public ArrayList<HashMap<String,List<String>>> getTags_add(){
+    public String getTags_add(){
         return tags_add;
     }
 
+
     //set函数
+    public void setId(int id) { this.id = id; }
     public void setName(String name){
         this.name = name;
     }
-    public void addTags_init(ArrayList<String> a){
+    public void setTags_init(String a){
         if(!a.isEmpty()){
-            for(int i=0; i<a.size(); i++)
-                tags_init.add(a.get(i));
+            this.tags_init = a;
         }
     }
-    public void addTags_add(ArrayList<HashMap<String,List<String>>> a){
+    public void addTags_add(String a){
         if(!a.isEmpty()){
-            for(int i=0; i<a.size(); i++)
-                tags_add.add(a.get(i));
+            this.tags_add += a;
         }
     }
 }

@@ -44,18 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnRecorder = (Button) findViewById(R.id.btn_record);
         listview = (ListView) findViewById(R.id.listview);
         btnRecorder.setOnClickListener(this);
-        String text =
-                "早上好\n" +
-                        "早上好，吃了吗\n" +
-                        "吃了面条\n" +
-                        "我也吃了面条\n" +
-                        "不错，我很喜欢吃面条\n" +
-                        "牛肉面是我最爱\n" +
-                        "中午了，一起吃个饭吧\n" +
-                        "好啊好啊\n";
-        List<String> sentenceList = HanLP.extractSummary(text, 1);
-        System.out.println(sentenceList);
-
     }
 
     @Override
@@ -73,10 +61,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.setListener(new RecognizerDialogListener() {
             @Override
             public void onResult(RecognizerResult recognizerResult, boolean isLast) {
+                Log.d(TAG, "onResult: " + 222);
                 if (!isLast) {
                     //解析语音
                     String result = parseVoice(recognizerResult.getResultString());
                     fullText = fullText + result;
+                    List<String> sentenceList = HanLP.extractKeyword(fullText, 3);
+                    //todo
                 }
             }
 

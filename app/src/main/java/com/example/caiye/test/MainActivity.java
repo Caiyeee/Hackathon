@@ -3,79 +3,105 @@ package com.example.caiye.test;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
-import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
-import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper;
-import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout;
-import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
-import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RapidFloatingActionContentLabelList;
+import com.google.gson.Gson;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
+
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "MainActivity";
     private ListView listview;
-    private RapidFloatingActionLayout rfabLayout;
-    private RapidFloatingActionButton rfabButton;
+    private Button btnRecorder;
+    private String fullText = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SpeechUtility.createUtility(this, SpeechConstant.APPID + "=5abf120b");
         setContentView(R.layout.activity_main);
-
+        btnRecorder = (Button) findViewById(R.id.btn_record);
         listview = (ListView) findViewById(R.id.listview);
-        rfabLayout = (RapidFloatingActionLayout) findViewById(R.id.rfablayout);
-        rfabButton = (RapidFloatingActionButton) findViewById(R.id.btn_rfab);
-
-        //悬浮按钮
-//        RapidFloatingActionContentLabelList rfabContent = new RapidFloatingActionContentLabelList(this);
-//        List<RFACLabelItem> items = new ArrayList<>();
-//        items.add(new RFACLabelItem<Integer>()
-//                    .setLabel("新增朋友")
-//                    .setResId(R.mipmap.add)
-//                    .setIconNormalColor(Color.WHITE)
-//                    .setIconPressedColor(0xffbf360c)
-//                    .setLabelColor(R.color.black)
-//                    .setWrapper(0));
-//        items.add(new RFACLabelItem<Integer>()
-//                .setLabel("好友列表")
-//                .setResId(R.mipmap.add)
-//                .setIconNormalColor(Color.WHITE)
-//                .setIconPressedColor(0xffbf360c)
-//                .setLabelColor(R.color.black)
-//                .setWrapper(0));
-//        items.add(new RFACLabelItem<Integer>()
-//                .setLabel("设置")
-//                .setResId(R.mipmap.add)
-//                .setIconNormalColor(Color.WHITE)
-//                .setIconPressedColor(0xffbf360c)
-//                .setLabelColor(R.color.black)
-//                .setWrapper(0));
-//
-//        rfabContent.setItems(items)
-//                    .setIconShadowRadius(ABTextUtil.dip2px(this,5))
-//                    .setIconShadowColor(0xff888888)
-//                    .setIconShadowDy(ABTextUtil.dip2px(this,5));
-//
-//        RapidFloatingActionHelper rfabHelper = new RapidFloatingActionHelper(
-//                this, rfabLayout, rfabButton, rfabContent
-//        ).build();
-//
-//        //按钮的点击事件（跳转）
-//        rfabContent.setOnRapidFloatingActionContentLabelListListener(new RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener() {
-//            @Override
-//            public void onRFACItemLabelClick(int i, RFACLabelItem rfacLabelItem) {
-//
-//            }
-//
-//            @Override
-//            public void onRFACItemIconClick(int i, RFACLabelItem rfacLabelItem) {
-//
-//            }
-//        });
-
+        btnRecorder.setOnClickListener(this);
 
     }
+
+    @Override
+    public void onClick(View view) {
+        btnVoice();
+    }
+
+    // 开始说话：
+    private void btnVoice() {
+        RecognizerDialog dialog = new RecognizerDialog(this, null);
+        dialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+        dialog.setParameter(SpeechConstant.ACCENT, "mandarin");
+        dialog.setParameter(SpeechConstant.VAD_BOS, "4000");
+        dialog.setParameter(SpeechConstant.VAD_EOS, "8000");
+        dialog.setListener(new RecognizerDialogListener() {
+            @Override
+            public void onResult(RecognizerResult recognizerResult, boolean isLast) {
+                if (!isLast) {
+                    //解析语音
+                    String result = parseVoice(recognizerResult.getResultString());
+                    fullText = fullText + result;
+                }
+            }
+
+            @Override
+            public void onError(SpeechError speechError) {
+            }
+        });
+        dialog.show();
+        Toast.makeText(this, "请开始说话", Toast.LENGTH_SHORT).show();
+    }
+
+    public String parseVoice(String resultString) {
+        Gson gson = new Gson();
+        Voice voiceBean = gson.fromJson(resultString, Voice.class);
+
+        StringBuilder sb = new StringBuilder();
+        ArrayList<Voice.WSBean> ws = voiceBean.ws;
+        for (Voice.WSBean wsBean : ws) {
+            String word = wsBean.cw.get(0).w;
+            sb.append(word);
+        }
+        return sb.toString();
+    }
+
+    public class Voice {
+        ArrayList<WSBean> ws;
+
+        class WSBean {
+            ArrayList<CWBean> cw;
+        }
+
+        class CWBean {
+            String w;
+        }
+    }
+
 }
+
+
+

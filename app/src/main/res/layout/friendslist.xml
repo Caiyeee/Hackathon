@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <SearchView
         android:id="@+id/search"
@@ -15,11 +17,44 @@
         android:layout_marginRight="10dp">
     </SearchView>
 
-    <ListView
-        android:id="@+id/friends"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/friendsAndFloat"
+        android:paddingBottom="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp">
 
-    </ListView>
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/friends">
+        </ListView>
+
+        <android.support.design.widget.FloatingActionButton
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add"
+            android:backgroundTint="@color/white"
+            android:src="@mipmap/add"
+            app:fabSize="normal"
+            android:layout_alignBottom="@+id/jumpToHome"
+            android:layout_marginBottom="65dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/jumpToHome"
+            android:backgroundTint="@color/white"
+            android:src="@mipmap/more"
+            app:fabSize="normal"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"/>
+    </RelativeLayout>
+
 
 </LinearLayout>

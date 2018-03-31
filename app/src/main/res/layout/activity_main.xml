@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/constraint"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:paddingTop="5dp">
         <TextView
             android:layout_width="wrap_content"
@@ -65,30 +65,13 @@
             app:layout_constraintLeft_toLeftOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
-
-
-    <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout
-        android:id="@+id/rfablayout"
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_end"
-        app:rfal_frame_alpha="0.7"
-        app:rfal_frame_color="#ffffff"
-        android:layout_marginBottom="15dp">
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/tips"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="搜索一个好友吧~"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="40dp"
-            android:textColor="#777"
-            android:textSize="30sp"/>
+        android:id="@+id/listAndFloat"
+        android:paddingBottom="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp">
 
         <ListView
             android:layout_width="wrap_content"
@@ -96,23 +79,21 @@
             android:id="@+id/listview">
         </ListView>
 
-        <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton xmlns:rfab="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/btn_rfab"
+        <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:padding="3dp"
-            rfab:rfab_color_normal="#ffffff"
-            rfab:rfab_color_pressed="#999999"
-            rfab:rfab_shadow_color="#cccccc"
-            rfab:rfab_shadow_dx="0dp"
-            rfab:rfab_shadow_dy="5dp"
-            rfab:rfab_shadow_radius="7dp"
-            rfab:rfab_size="normal"
-            rfab:rfab_drawable="@mipmap/add"
+            android:id="@+id/jumpToFriends"
+            android:backgroundTint="@color/white"
+            android:src="@mipmap/friend"
+            app:fabSize="normal"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"/>
+    </RelativeLayout>
 
-    </com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout>
+
+
+
+
 
 </LinearLayout>

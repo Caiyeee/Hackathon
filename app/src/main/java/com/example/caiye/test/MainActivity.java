@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=5abf120b");
         setContentView(R.layout.activity_main);
+
+
+
         btnRecorder = (Button) findViewById(R.id.btn_record);
         btnRecorderEnd = (Button) findViewById(R.id.btn_end);
         listView = (ListView) findViewById(R.id.listview);

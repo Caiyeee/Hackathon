@@ -56,5 +56,12 @@
             android:layout_marginRight="25dp"/>
     </RelativeLayout>
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchList"
+        android:visibility="gone">
+    </ListView>
+
 
 </LinearLayout>

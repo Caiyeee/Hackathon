@@ -30,10 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private ListView listview;
     private Button btnRecorder;
+    private Button btnRecorderEnd;
     private String fullText = " ";
 
     @Override
@@ -42,13 +43,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=5abf120b");
         setContentView(R.layout.activity_main);
         btnRecorder = (Button) findViewById(R.id.btn_record);
+        btnRecorderEnd = (Button) findViewById(R.id.btn_end);
         listview = (ListView) findViewById(R.id.listview);
-        btnRecorder.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View view) {
-        btnVoice();
+        btnRecorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnVoice();
+            }
+        });
+        btnRecorderEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String retString = "";
+                List<String> sentenceList = HanLP.extractKeyword(fullText, 5);
+                for (String item : sentenceList) {
+                    retString = retString + item + ",";
+                }
+                retString = retString.substring(0, retString.length() - 1) + ";";
+                //todo to show the keyword
+                Log.d(TAG, "onClick: ");
+            }
+        });
     }
 
     // 开始说话：
@@ -66,8 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //解析语音
                     String result = parseVoice(recognizerResult.getResultString());
                     fullText = fullText + result;
-                    List<String> sentenceList = HanLP.extractKeyword(fullText, 3);
-                    //todo
                 }
             }
 

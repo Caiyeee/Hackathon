@@ -31,4 +31,3 @@ dependencies {
     implementation files('libs/Sunflower.jar')
     implementation files('libs/hanlp-portable-1.6.1.jar')
 }
-

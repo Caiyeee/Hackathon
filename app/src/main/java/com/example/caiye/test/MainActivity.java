@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 
 import com.google.gson.Gson;
+import com.hankcs.hanlp.HanLP;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
@@ -43,6 +44,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnRecorder = (Button) findViewById(R.id.btn_record);
         listview = (ListView) findViewById(R.id.listview);
         btnRecorder.setOnClickListener(this);
+        String text =
+                "早上好\n" +
+                        "早上好，吃了吗\n" +
+                        "吃了面条\n" +
+                        "我也吃了面条\n" +
+                        "不错，我很喜欢吃面条\n" +
+                        "牛肉面是我最爱\n" +
+                        "中午了，一起吃个饭吧\n" +
+                        "好啊好啊\n";
+        List<String> sentenceList = HanLP.extractSummary(text, 1);
+        System.out.println(sentenceList);
 
     }
 

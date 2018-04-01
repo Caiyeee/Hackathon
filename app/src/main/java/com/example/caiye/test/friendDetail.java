@@ -3,6 +3,7 @@ package com.example.caiye.test;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -41,7 +42,10 @@ public class friendDetail extends AppCompatActivity {
         intentToShow = getIntent();
         if (intentToShow != null) {
             friend = (Person) intentToShow.getSerializableExtra("person");
-            name.setText(friend.getName());
+            if(friend==null)
+                Log.e("frinde","isnull");
+            if(friend.getName()!=null)
+                name.setText(friend.getName());
             init_tags.setText(friend.getTags_init());
             SimpleAdapter simpleAdapter = new SimpleAdapter(this, getTags(friend.getTags_add())
                     , R.layout.friend_item,
@@ -50,7 +54,6 @@ public class friendDetail extends AppCompatActivity {
             listView.setAdapter(simpleAdapter);
             simpleAdapter.notifyDataSetChanged();
             listView.setAdapter(simpleAdapter);
-
         }
 
 

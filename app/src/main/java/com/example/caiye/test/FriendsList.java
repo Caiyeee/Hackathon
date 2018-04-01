@@ -1,6 +1,7 @@
 package com.example.caiye.test;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -66,6 +67,15 @@ public class FriendsList extends AppCompatActivity {
                 new String[]{"id","name"},new int[]{R.id.firstLetter,R.id.name});
         simpleAdapter.notifyDataSetChanged();
         listView.setAdapter(simpleAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(FriendsList.this,friendDetail.class);
+                intent.putExtra("Person",friends.get(position));
+                startActivity(intent);
+            }
+        });
 
         //点击更多/主页按钮
         jumpToHome.setOnClickListener(new View.OnClickListener() {
@@ -144,13 +154,7 @@ public class FriendsList extends AppCompatActivity {
                 return false;
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedItem = (String) adapterView.getItemAtPosition(i);
-                //todo link to friend_detail
-            }
-        });
+
     }
 
     //更新朋友列表

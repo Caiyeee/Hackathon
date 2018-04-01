@@ -9,7 +9,7 @@ import java.util.List;
  * Created by caiye on 2018/3/31.
  */
 
-public class Person  implements Serializable {
+public class Person implements Serializable {
     private int id;
     private String name;
     private String tags_init;

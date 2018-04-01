@@ -9,7 +9,6 @@
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:queryHint="搜索好友"
         android:iconifiedByDefault="false"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="10dp"

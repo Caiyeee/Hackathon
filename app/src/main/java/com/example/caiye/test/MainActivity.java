@@ -82,7 +82,12 @@ public class MainActivity extends AppCompatActivity {
             getTag = person.getTags_init() + person.getTags_add();
         }
 
-        if (getName == null) {
+        if(getTag==null)
+            tags.setText("您沒有對這位朋友設置標籤喔！");
+        else
+            tags.setText(getTag);
+
+        if(getName==null){
             name.setText("None");
             youandme.setAlpha(255);
         } else {
@@ -92,13 +97,10 @@ public class MainActivity extends AppCompatActivity {
             /////////////////////////////////////////////////////////////////////
         }
 
-        if (getTag == null)
-            tags.setText("您沒有對這位朋友設置標籤喔！");
-        else
-            tags.setText(getTag);
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, recommend, R.layout.friend_item,
-                new String[]{"title", ""}, new int[]{R.id.firstLetter, R.id.name});
+
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this,recommend,R.layout.friend_item,
+                new String[]{"title",""},new int[]{R.id.firstLetter,R.id.name});
         simpleAdapter.notifyDataSetChanged();
         listView.setAdapter(simpleAdapter);
 
@@ -106,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         jumpToFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FriendsList.class);
+                Intent intent = new Intent(MainActivity.this,FriendsList.class);
                 startActivity(intent);
             }
         });
@@ -124,15 +126,13 @@ public class MainActivity extends AppCompatActivity {
         btnRecorderEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String retString = "000";
+                String retString = "";
                 List<String> sentenceList = HanLP.extractKeyword(fullText, 5);
                 for (String item : sentenceList) {
                     retString = retString + item + ",";
                 }
                 retString = retString.substring(0, retString.length() - 1) + ";";
                 //todo to show the keyword
-                Map<String, String> temMap = new HashMap<String, String>();
-                temMap.put("keyword", retString);
                 Log.d(TAG, "onClick: ");
             }
         });
@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setListener(new RecognizerDialogListener() {
             @Override
             public void onResult(RecognizerResult recognizerResult, boolean isLast) {
+                Log.d(TAG, "onResult: " + 222);
                 if (!isLast) {
                     //解析语音
                     String result = parseVoice(recognizerResult.getResultString());

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private String getName;
     private String getTag;
     private TextView keywordTv;
+    private DBOperation dbOperation;
 
     private List<String> getData() {
 
@@ -74,8 +75,10 @@ public class MainActivity extends AppCompatActivity {
         jumpToFriends = (FloatingActionButton) findViewById(R.id.jumpToFriends);
         keywordTv = (TextView) findViewById(R.id.keyword_tv);
 
+        dbOperation = new DBOperation(this);
+
         intentToShow = getIntent();
-        person = (Person) intentToShow.getSerializableExtra("person");
+        person = (Person) intentToShow.getSerializableExtra("friend");
         if (person != null) {
             getName = person.getName();
             getTag = person.getTags_init() + person.getTags_add();
@@ -97,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,friendDetail.class);
+                intent.putExtra("person",person);
+                startActivity(intent);
+            }
+        });
         //点击悬浮按钮跳转到好友列表页面
         jumpToFriends.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,15 +131,19 @@ public class MainActivity extends AppCompatActivity {
         btnRecorderEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String retString = "";
+                keywordTv.setText("分析提取中，請稍等");
+                String retString = "  ";
                 List<String> sentenceList = HanLP.extractKeyword(fullText, 5);
                 for (String item : sentenceList) {
                     retString = retString + item + ",";
                 }
                 retString = retString.substring(0, retString.length() - 1) + ";";
-                //todo to show the keyword
                 person.addTags_add(retString);
-                keywordTv.append(retString + "\n");
+            //    keywordTv.append(retString + "\n");
+                keywordTv.setText(retString);
+
+                person.addTags_add(retString);
+                dbOperation.update(person);
             }
         });
     }

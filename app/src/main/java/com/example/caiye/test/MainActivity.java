@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         person = (Person) intentToShow.getSerializableExtra("friend");
         if (person != null) {
             getName = person.getName();
-            getTag = person.getTags_init() + person.getTags_add();
+            getTag = person.getTags_init();
         }
 
         if (getTag == null)
@@ -96,16 +96,19 @@ public class MainActivity extends AppCompatActivity {
             name.setText(getName);
             youandme.setAlpha(100);
             //获取推荐，放到recommend中
-            /////////////////////////////////////////////////////////////////////
         }
 
 
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,friendDetail.class);
-                intent.putExtra("person",person);
-                startActivity(intent);
+                if(person==null)
+                    Toast.makeText(getApplicationContext(),"請先選擇好友",Toast.LENGTH_SHORT).show();
+                else {
+                    Intent intent = new Intent(MainActivity.this,friendDetail.class);
+                    intent.putExtra("person",person);
+                    startActivity(intent);
+                }
             }
         });
         //点击悬浮按钮跳转到好友列表页面
@@ -141,8 +144,6 @@ public class MainActivity extends AppCompatActivity {
                 person.addTags_add(retString);
             //    keywordTv.append(retString + "\n");
                 keywordTv.setText(retString);
-
-                person.addTags_add(retString);
                 dbOperation.update(person);
             }
         });

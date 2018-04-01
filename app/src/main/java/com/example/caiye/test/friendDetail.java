@@ -25,13 +25,17 @@ public class friendDetail extends AppCompatActivity {
     private Intent intentToShow;
     private Person friend;
 
-    private List<String> getTags(String tags) {
-        Log.e("tags_add", tags);
+    private List<String> getTags(String tags){
+        Log.e("tags_add",tags);
         List<String> tem = Arrays.asList(tags.split(";"));
         List<String> list = new ArrayList<String>();
-        for (int i = 0; i < tem.size(); i++) {
-            if (!tem.get(i).equals("  "))
-                list.add(tem.get(i));
+        for(int i=0; i<tem.size(); i++){
+            String s = tem.get(i);
+            for(int j=0; j<s.length(); j++)
+                if(s.charAt(j)!=' '){
+                    list.add(tem.get(i));
+                    break;
+                }
         }
         return list;
     }
@@ -47,11 +51,10 @@ public class friendDetail extends AppCompatActivity {
         intentToShow = getIntent();
         if (intentToShow != null) {
             friend = (Person) intentToShow.getSerializableExtra("person");
-            if (friend.getName() != null)
+            if(friend.getName()!=null)
                 name.setText(friend.getName());
             init_tags.setText(friend.getTags_init());
-            listView.setAdapter(new ArrayAdapter<String>(this,
-                    android.R.layout.simple_expandable_list_item_1, getTags(friend.getTags_add())));
+            listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,getTags(friend.getTags_add())));
         }
 
 

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -24,14 +25,13 @@ public class friendDetail extends AppCompatActivity {
     private Intent intentToShow;
     private Person friend;
 
-    private List<Map<String, String>> getTags(String tags) {
-        //todo 输入是逗号和分号分割的字符串
+    private List<String> getTags(String tags){
+        Log.e("tags_add",tags);
         List<String> tem = Arrays.asList(tags.split(";"));
-        List<Map<String,String>> list = new ArrayList<Map<String, String>>();
+        List<String> list = new ArrayList<String>();
         for(int i=0; i<tem.size(); i++){
-            Map<String,String> map = new HashMap<>();
-            map.put("keyword", tem.get(i));
-            list.add(map);
+            if(!tem.get(i).equals("  "))
+                list.add(tem.get(i));
         }
         return list;
     }
@@ -50,10 +50,7 @@ public class friendDetail extends AppCompatActivity {
             if(friend.getName()!=null)
                 name.setText(friend.getName());
             init_tags.setText(friend.getTags_init());
-            SimpleAdapter simpleAdapter = new SimpleAdapter(this, getTags(friend.getTags_add()), R.layout.friend_item,
-                    new String[]{"firstLetter", "name"}, new int[]{R.id.firstLetter, R.id.name});
-            simpleAdapter.notifyDataSetChanged();
-            listView.setAdapter(simpleAdapter);
+            listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,getTags(friend.getTags_add())));
         }
 
 

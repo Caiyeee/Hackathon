@@ -44,7 +44,7 @@ public class DBOperation {
         values.put("tags_init",person.getTags_init());
         values.put("tags_add",person.getTags_add());
 
-        db.update("FEIENDS",values,"id=?",new String[]{ String.valueOf(person.getId())});
+        db.update("FRIENDS",values,"id=?",new String[]{ String.valueOf(person.getId())});
         db.close();
     }
 

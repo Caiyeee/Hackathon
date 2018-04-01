@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         youandme = (ImageView) findViewById(R.id.youandme);
         btnRecorder = (Button) findViewById(R.id.btn_record);
         btnRecorderEnd = (Button) findViewById(R.id.btn_end);
-        listview = (ListView) findViewById(R.id.listview);
+        listView = (ListView) findViewById(R.id.listview);
         jumpToFriends = (FloatingActionButton) findViewById(R.id.jumpToFriends);
 
 
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         SimpleAdapter simpleAdapter = new SimpleAdapter(this,recommend,R.layout.friend_item,
                 new String[]{"title",""},new int[]{R.id.firstLetter,R.id.name});
         simpleAdapter.notifyDataSetChanged();
-        listview.setAdapter(simpleAdapter);
+        listView.setAdapter(simpleAdapter);
 
         //点击悬浮按钮跳转到好友列表页面
         jumpToFriends.setOnClickListener(new View.OnClickListener() {
@@ -110,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //开始录音
-        listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,
-                getData()));
+//        listView = (ListView) findViewById(R.id.listview);
+//        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,
+//                getData()));
         btnRecorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

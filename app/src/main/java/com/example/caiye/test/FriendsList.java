@@ -5,12 +5,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +40,7 @@ public class FriendsList extends AppCompatActivity {
 
         searchView = (SearchView) findViewById(R.id.search);
         listView = (ListView) findViewById(R.id.friends);
-        jumpToHome = (FloatingActionButton)findViewById(R.id.jumpToHome);
+        jumpToHome = (FloatingActionButton) findViewById(R.id.jumpToHome);
         addBtn = (FloatingActionButton) findViewById(R.id.add);
         relativeLayout = (RelativeLayout) findViewById(R.id.friendsAndFloat);
         searchList = (ListView) findViewById(R.id.searchList);
@@ -47,8 +49,8 @@ public class FriendsList extends AppCompatActivity {
         dbOperation = new DBOperation(this);
         friends = dbOperation.getAllFriends();
         //填充listview
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this,getFriends(friends),R.layout.friend_item,
-                new String[]{"firstLetter","name"},new int[]{R.id.firstLetter,R.id.name});
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, getFriends(friends), R.layout.friend_item,
+                new String[]{"firstLetter", "name"}, new int[]{R.id.firstLetter, R.id.name});
         simpleAdapter.notifyDataSetChanged();
         listView.setAdapter(simpleAdapter);
 
@@ -56,7 +58,7 @@ public class FriendsList extends AppCompatActivity {
         jumpToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(addBtn.getVisibility()==View.GONE){//此时是更多按钮
+                if (addBtn.getVisibility() == View.GONE) {//此时是更多按钮
                     addBtn.setVisibility(View.VISIBLE);
                     jumpToHome.setImageResource(R.mipmap.home);
                 } else {//此时是返回主页按钮
@@ -82,10 +84,11 @@ public class FriendsList extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
             // 当搜索内容改变时触发该方法
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(!TextUtils.isEmpty(newText)){
+                if (!TextUtils.isEmpty(newText)) {
                     relativeLayout.setVisibility(View.GONE);
                     searchList.setVisibility(View.VISIBLE);
                     ArrayList<Person> queryData = dbOperation.query(newText);
@@ -99,6 +102,14 @@ public class FriendsList extends AppCompatActivity {
                 return false;
             }
         });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedItem = (String) adapterView.getItemAtPosition(i);
+                //todo link to friend_detail
+            }
+        });
+
 
     }
 
@@ -106,26 +117,25 @@ public class FriendsList extends AppCompatActivity {
     public SimpleAdapter getQueryAdapter(String keyword) {
         ArrayList<Person> arrayList = new ArrayList<Person>();
         arrayList = dbOperation.query(keyword);
-        SimpleAdapter queryAdapter = new SimpleAdapter(this,getFriends(arrayList),R.layout.friend_item,
-                new String[]{"firstLetter","name"},new int[]{R.id.firstLetter,R.id.name});
+        SimpleAdapter queryAdapter = new SimpleAdapter(this, getFriends(arrayList), R.layout.friend_item,
+                new String[]{"firstLetter", "name"}, new int[]{R.id.firstLetter, R.id.name});
         return queryAdapter;
     }
 
     //查询界面更新
-    public void updateLayout(SimpleAdapter sAdapter)
-    {
+    public void updateLayout(SimpleAdapter sAdapter) {
         searchList.setAdapter(sAdapter);
     }
 
     //构造adapter需要
-    private List<Map<String,String>> getFriends(ArrayList<Person> friend){
-        List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+    private List<Map<String, String>> getFriends(ArrayList<Person> friend) {
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 
-        if(!friend.isEmpty()){
-            for(int i=0; i<friend.size(); i++){
-                Map<String,String> map = new HashMap<String,String>();
-                map.put("firstLetter",friend.get(i).getName().substring(0,1).toUpperCase());
-                map.put("name",friend.get(i).getName());
+        if (!friend.isEmpty()) {
+            for (int i = 0; i < friend.size(); i++) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("firstLetter", friend.get(i).getName().substring(0, 1).toUpperCase());
+                map.put("name", friend.get(i).getName());
                 list.add(map);
             }
         }

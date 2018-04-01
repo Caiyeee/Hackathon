@@ -27,7 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".friendDetail"></activity>
+        <activity android:name=".friendDetail" />
+        <activity android:name=".FriendsList" />
     </application>
 
 </manifest>

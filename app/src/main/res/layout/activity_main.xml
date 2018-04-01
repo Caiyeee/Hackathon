@@ -94,10 +94,10 @@
             android:id="@+id/keyword_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:text="點擊“結果”按鈕可查看"
             android:textAlignment="center"
-            android:textSize="24sp"
             android:textColor="@color/black"
-            android:text="點擊“結果”按鈕可查看"/>
+            android:textSize="24sp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/jumpToFriends"

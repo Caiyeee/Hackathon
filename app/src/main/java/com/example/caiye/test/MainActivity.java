@@ -33,7 +33,6 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private ListView listView;
     private Button btnRecorder;
     private Button btnRecorderEnd;
     private String fullText = " ";
@@ -47,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private SimpleAdapter simpleAdapter;
     private String getName;
     private String getTag;
+    private TextView keywordTv;
 
     private List<String> getData() {
 
@@ -71,9 +71,8 @@ public class MainActivity extends AppCompatActivity {
         youandme = (ImageView) findViewById(R.id.youandme);
         btnRecorder = (Button) findViewById(R.id.btn_record);
         btnRecorderEnd = (Button) findViewById(R.id.btn_end);
-        listView = (ListView) findViewById(R.id.listview);
         jumpToFriends = (FloatingActionButton) findViewById(R.id.jumpToFriends);
-
+        keywordTv = (TextView) findViewById(R.id.keyword_tv);
 
         intentToShow = getIntent();
         person = (Person) intentToShow.getSerializableExtra("Person");
@@ -82,12 +81,12 @@ public class MainActivity extends AppCompatActivity {
             getTag = person.getTags_init() + person.getTags_add();
         }
 
-        if(getTag==null)
+        if (getTag == null)
             tags.setText("您沒有對這位朋友設置標籤喔！");
         else
             tags.setText(getTag);
 
-        if(getName==null){
+        if (getName == null) {
             name.setText("None");
             youandme.setAlpha(255);
         } else {
@@ -98,17 +97,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this,recommend,R.layout.friend_item,
-                new String[]{"title",""},new int[]{R.id.firstLetter,R.id.name});
-        simpleAdapter.notifyDataSetChanged();
-        listView.setAdapter(simpleAdapter);
-
         //点击悬浮按钮跳转到好友列表页面
         jumpToFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,FriendsList.class);
+                Intent intent = new Intent(MainActivity.this, FriendsList.class);
                 startActivity(intent);
             }
         });
@@ -120,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         btnRecorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fullText = " ";
                 btnVoice();
             }
         });
@@ -133,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 retString = retString.substring(0, retString.length() - 1) + ";";
                 //todo to show the keyword
-                Log.d(TAG, "onClick: ");
+//                person.addTags_add(retString);
+                keywordTv.append(retString + "\n");
             }
         });
     }
@@ -144,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
         dialog.setParameter(SpeechConstant.ACCENT, "mandarin");
         dialog.setParameter(SpeechConstant.VAD_BOS, "4000");
-        dialog.setParameter(SpeechConstant.VAD_EOS, "8000");
+        dialog.setParameter(SpeechConstant.VAD_EOS, "4000");
         dialog.setListener(new RecognizerDialogListener() {
             @Override
             public void onResult(RecognizerResult recognizerResult, boolean isLast) {

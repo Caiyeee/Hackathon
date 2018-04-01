@@ -1,5 +1,6 @@
 package com.example.caiye.test;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * Created by caiye on 2018/3/31.
  */
 
-public class Person {
+public class Person  implements Serializable {
     private int id;
     private String name;
     private String tags_init;

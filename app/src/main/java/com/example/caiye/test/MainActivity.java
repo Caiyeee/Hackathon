@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         keywordTv = (TextView) findViewById(R.id.keyword_tv);
 
         intentToShow = getIntent();
-        person = (Person) intentToShow.getSerializableExtra("Person");
+        person = (Person) intentToShow.getSerializableExtra("person");
         if (person != null) {
             getName = person.getName();
             getTag = person.getTags_init() + person.getTags_add();
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 retString = retString.substring(0, retString.length() - 1) + ";";
                 //todo to show the keyword
-//                person.addTags_add(retString);
+                person.addTags_add(retString);
                 keywordTv.append(retString + "\n");
             }
         });

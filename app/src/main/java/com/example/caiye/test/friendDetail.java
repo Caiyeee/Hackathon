@@ -25,7 +25,6 @@ public class friendDetail extends AppCompatActivity {
     private Person friend;
 
     private List<Map<String, String>> getTags(String tags) {
-        //todo 输入是逗号和分号分割的字符串
         List<String> tem = Arrays.asList(tags.split(";"));
         List<Map<String,String>> list = new ArrayList<Map<String, String>>();
         for(int i=0; i<tem.size(); i++){
@@ -50,7 +49,8 @@ public class friendDetail extends AppCompatActivity {
             if(friend.getName()!=null)
                 name.setText(friend.getName());
             init_tags.setText(friend.getTags_init());
-            SimpleAdapter simpleAdapter = new SimpleAdapter(this, getTags(friend.getTags_add()), R.layout.friend_item,
+            SimpleAdapter simpleAdapter = new SimpleAdapter(this, getTags(friend.getTags_add()),
+                    R.layout.friend_item,
                     new String[]{"firstLetter", "name"}, new int[]{R.id.firstLetter, R.id.name});
             simpleAdapter.notifyDataSetChanged();
             listView.setAdapter(simpleAdapter);

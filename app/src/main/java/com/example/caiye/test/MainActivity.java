@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         person = (Person) intentToShow.getSerializableExtra("friend");
         if (person != null) {
             getName = person.getName();
-            getTag = person.getTags_init() + person.getTags_add();
+            getTag = person.getTags_init();
         }
 
         if (getTag == null)
@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
             name.setText(getName);
             youandme.setAlpha(100);
             //获取推荐，放到recommend中
-            /////////////////////////////////////////////////////////////////////
         }
 
 

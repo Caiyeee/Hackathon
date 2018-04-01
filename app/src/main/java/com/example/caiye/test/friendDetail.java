@@ -30,8 +30,12 @@ public class friendDetail extends AppCompatActivity {
         List<String> tem = Arrays.asList(tags.split(";"));
         List<String> list = new ArrayList<String>();
         for(int i=0; i<tem.size(); i++){
-            if(!tem.get(i).equals("  "))
-                list.add(tem.get(i));
+            String s = tem.get(i);
+            for(int j=0; j<s.length(); j++)
+                if(s.charAt(j)!=' '){
+                    list.add(tem.get(i));
+                    break;
+                }
         }
         return list;
     }

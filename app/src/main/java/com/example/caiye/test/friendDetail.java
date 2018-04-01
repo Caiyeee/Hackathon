@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,9 +27,13 @@ public class friendDetail extends AppCompatActivity {
     private List<Map<String, String>> getTags(String tags) {
         //todo 输入是逗号和分号分割的字符串
         List<String> tem = Arrays.asList(tags.split(";"));
-
-
-        return null;
+        List<Map<String,String>> list = new ArrayList<Map<String, String>>();
+        for(int i=0; i<tem.size(); i++){
+            Map<String,String> map = new HashMap<>();
+            map.put("keyword", tem.get(i));
+            list.add(map);
+        }
+        return list;
     }
 
     @Override
@@ -42,16 +47,11 @@ public class friendDetail extends AppCompatActivity {
         intentToShow = getIntent();
         if (intentToShow != null) {
             friend = (Person) intentToShow.getSerializableExtra("person");
-            if(friend==null)
-                Log.e("frinde","isnull");
             if(friend.getName()!=null)
                 name.setText(friend.getName());
             init_tags.setText(friend.getTags_init());
-            SimpleAdapter simpleAdapter = new SimpleAdapter(this, getTags(friend.getTags_add())
-                    , R.layout.friend_item,
+            SimpleAdapter simpleAdapter = new SimpleAdapter(this, getTags(friend.getTags_add()), R.layout.friend_item,
                     new String[]{"firstLetter", "name"}, new int[]{R.id.firstLetter, R.id.name});
-            simpleAdapter.notifyDataSetChanged();
-            listView.setAdapter(simpleAdapter);
             simpleAdapter.notifyDataSetChanged();
             listView.setAdapter(simpleAdapter);
         }

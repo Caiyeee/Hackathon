@@ -72,7 +72,7 @@ public class FriendsList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(FriendsList.this,friendDetail.class);
-                intent.putExtra("Person",friends.get(position));
+                intent.putExtra("person",friends.get(position));
                 startActivity(intent);
             }
         });

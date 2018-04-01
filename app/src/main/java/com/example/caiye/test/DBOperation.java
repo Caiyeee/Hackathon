@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,7 @@ public class DBOperation {
         values.put("tags_init",tags_init);
         long ID = db.insert("FRIENDS",null,values);
         db.close();
+        Log.e("ID",":"+ID);
         return (int)ID;
     }
 
@@ -56,6 +59,7 @@ public class DBOperation {
                 person.setName(cursor.getString(cursor.getColumnIndex("name")));
                 person.setTags_init(cursor.getString(cursor.getColumnIndex("tags_init")));
                 person.addTags_add(cursor.getString(cursor.getColumnIndex("tags_add")));
+                arrayList.add(person);
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -65,21 +69,25 @@ public class DBOperation {
 
     public ArrayList<Person> query(String keyword){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT id, name, tags_init, tags_add FROM FRIENDS WHERE name LIKE '%" + keyword
-                + "% or tags_init like %" + keyword + "% or tags_add like %" + keyword  + "%";
+        String query = "SELECT id, name, tags_init, tags_add FROM FRIENDS WHERE name LIKE \'%" + keyword
+                + "%\' or tags_init like \'%" + keyword + "%\' or tags_add like \'%" + keyword  + "%\'";
+        Log.e("query",query);
         ArrayList<Person>  arrayList = new ArrayList<Person>();
         Cursor cursor = db.rawQuery(query,null);
         if(cursor.moveToFirst()){
+            Log.e("cursor","has");
             do{
                  Person person = new Person();
                  person.setId(cursor.getInt(cursor.getColumnIndex("id")));
                  person.setName(cursor.getString(cursor.getColumnIndex("name")));
                  person.setTags_init(cursor.getString(cursor.getColumnIndex("tags_init")));
                  person.addTags_add(cursor.getString(cursor.getColumnIndex("tags_add")));
+                 arrayList.add(person);
             } while (cursor.moveToNext());
         }
         cursor.close();
         db.close();
+        Log.e("list","size"+arrayList.size());
         return arrayList;
     }
 
@@ -95,6 +103,7 @@ public class DBOperation {
                 person.setName(cursor.getString(cursor.getColumnIndex("name")));
                 person.setTags_init(cursor.getString(cursor.getColumnIndex("tags_init")));
                 person.addTags_add(cursor.getString(cursor.getColumnIndex("tags_add")));
+                arrayList.add(person);
             } while (cursor.moveToNext());
         }
         cursor.close();

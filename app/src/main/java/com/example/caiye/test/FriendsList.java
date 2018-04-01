@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,6 +43,7 @@ public class FriendsList extends AppCompatActivity {
     private ListView searchList;
     private DBOperation dbOperation;
     private SimpleAdapter simpleAdapter;
+    private SimpleAdapter sAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +60,10 @@ public class FriendsList extends AppCompatActivity {
         //获取数组库的所有数据
         dbOperation = new DBOperation(this);
         friends = dbOperation.getAllFriends();
+        Log.e("friends","num:"+friends.size());
         //填充listview
         simpleAdapter = new SimpleAdapter(this,getFriends(friends),R.layout.friend_item,
-                new String[]{"firstLetter","name"},new int[]{R.id.firstLetter,R.id.name});
+                new String[]{"id","name"},new int[]{R.id.firstLetter,R.id.name});
         simpleAdapter.notifyDataSetChanged();
         listView.setAdapter(simpleAdapter);
 
@@ -94,19 +97,21 @@ public class FriendsList extends AppCompatActivity {
                 dialog.setPositiveButton("保存", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(nameInput.length()==0)
-                            Toast.makeText(getApplicationContext(),"姓名不能為空",Toast.LENGTH_SHORT);
+                        if(nameInput.length()==0){
+                            Toast.makeText(getApplicationContext(),"姓名不能為空",Toast.LENGTH_SHORT).show();
+                        }
                         else {
                             ArrayList<Person> persons = dbOperation.queryName(nameInput.getText().toString());
                             if(persons!=null && persons.size()!=0)
-                                Toast.makeText(getApplicationContext(),"該名字已被添加過",Toast.LENGTH_SHORT);
+                                Toast.makeText(getApplicationContext(),"該名字已被添加過",Toast.LENGTH_SHORT).show();
                             else {
                                 String name = nameInput.getText().toString();
                                 String tags = tagsInput.getText().toString();
                                 int id = dbOperation.insert(name,tags);
                                 Person person = new Person(id,name,tags);
                                 friends.add(person);
-                                simpleAdapter.notifyDataSetChanged();
+                                updateList();
+                                Toast.makeText(getApplicationContext(),"添加成功",Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -129,10 +134,9 @@ public class FriendsList extends AppCompatActivity {
                 if(!TextUtils.isEmpty(newText)){
                     relativeLayout.setVisibility(View.GONE);
                     searchList.setVisibility(View.VISIBLE);
-                    ArrayList<Person> queryData = dbOperation.query(newText);
-
-                    SimpleAdapter queryAdapter = getQueryAdapter(newText);
-                    updateLayout(queryAdapter);
+                    updateLayout(newText);
+//                    SimpleAdapter queryAdapter = getQueryAdapter(newText);
+//                    updateLayout(queryAdapter);
                 } else {//搜索内容为空时切换回原列表
                     searchList.setVisibility(View.GONE);
                     relativeLayout.setVisibility(View.VISIBLE);
@@ -147,22 +151,35 @@ public class FriendsList extends AppCompatActivity {
                 //todo link to friend_detail
             }
         });
+    }
 
-
+    //更新朋友列表
+    public void updateList(){
+        friends = dbOperation.getAllFriends();
+        Log.e("friends","num:"+friends.size());
+        simpleAdapter = new SimpleAdapter(this,getFriends(friends),R.layout.friend_item,
+                new String[]{"id","name"},new int[]{R.id.firstLetter,R.id.name});
+        simpleAdapter.notifyDataSetChanged();
+        listView.setAdapter(simpleAdapter);
     }
 
     //人物查询
-    public SimpleAdapter getQueryAdapter(String keyword) {
-        ArrayList<Person> arrayList = new ArrayList<Person>();
-        arrayList = dbOperation.query(keyword);
-        SimpleAdapter queryAdapter = new SimpleAdapter(this,getFriends(arrayList),R.layout.friend_item,
-                new String[]{"firstLetter","name"},new int[]{R.id.firstLetter,R.id.name});
-        return queryAdapter;
-    }
+//    public SimpleAdapter getQueryAdapter(String keyword) {
+//        ArrayList<Person> arrayList = new ArrayList<Person>();
+//        arrayList = dbOperation.query(keyword);
+//        SimpleAdapter queryAdapter = new SimpleAdapter(this,getFriends(arrayList),R.layout.friend_item,
+//                new String[]{"id","name"},new int[]{R.id.firstLetter,R.id.name});
+//        return queryAdapter;
+//    }
 
     //查询界面更新
-    public void updateLayout(SimpleAdapter sAdapter)
+    public void updateLayout(String keyword)
     {
+        ArrayList<Person> arrayList = new ArrayList<Person>();
+        arrayList = dbOperation.query(keyword);
+        Log.e("query","num:"+arrayList.size());
+        sAdapter = new SimpleAdapter(this,getFriends(arrayList),R.layout.friend_item,
+                new String[]{"id","name"},new int[]{R.id.firstLetter,R.id.name});
         searchList.setAdapter(sAdapter);
     }
 
@@ -173,11 +190,12 @@ public class FriendsList extends AppCompatActivity {
         if(!friend.isEmpty()){
             for(int i=0; i<friend.size(); i++){
                 Map<String,String> map = new HashMap<String,String>();
-                map.put("firstLetter",friend.get(i).getName().substring(0,1).toUpperCase());
+                map.put("id",""+friend.get(i).getId());
                 map.put("name",friend.get(i).getName());
                 list.add(map);
             }
         }
+        Log.e("searchlist","size:"+list.size());
         return list;
     }
 

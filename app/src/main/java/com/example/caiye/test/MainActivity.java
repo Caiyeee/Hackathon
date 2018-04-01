@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,13 +25,6 @@ import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 
-import com.iflytek.cloud.RecognizerResult;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.SpeechUtility;
-import com.iflytek.cloud.ui.RecognizerDialog;
-import com.iflytek.cloud.ui.RecognizerDialogListener;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +32,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private ListView listview;
+    private ListView listView;
     private Button btnRecorder;
     private Button btnRecorderEnd;
     private String fullText = " ";
@@ -53,6 +47,17 @@ public class MainActivity extends AppCompatActivity {
     private String getName;
     private String getTag;
 
+    private List<String> getData() {
+
+        List<String> data = new ArrayList<String>();
+        data.add("测试数据1");
+        data.add("测试数据2");
+        data.add("测试数据3");
+        data.add("测试数据4");
+
+        return data;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         youandme = (ImageView) findViewById(R.id.youandme);
         btnRecorder = (Button) findViewById(R.id.btn_record);
         btnRecorderEnd = (Button) findViewById(R.id.btn_end);
-        listview = (ListView) findViewById(R.id.listview);
+        listView = (ListView) findViewById(R.id.listview);
         jumpToFriends = (FloatingActionButton) findViewById(R.id.jumpToFriends);
 
 
@@ -96,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         SimpleAdapter simpleAdapter = new SimpleAdapter(this,recommend,R.layout.friend_item,
                 new String[]{"title",""},new int[]{R.id.firstLetter,R.id.name});
         simpleAdapter.notifyDataSetChanged();
-        listview.setAdapter(simpleAdapter);
+        listView.setAdapter(simpleAdapter);
 
         //点击悬浮按钮跳转到好友列表页面
         jumpToFriends.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //开始录音
+//        listView = (ListView) findViewById(R.id.listview);
+//        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,
+//                getData()));
         btnRecorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

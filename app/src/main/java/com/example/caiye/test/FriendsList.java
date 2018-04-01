@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +50,7 @@ public class FriendsList extends AppCompatActivity {
 
         searchView = (SearchView) findViewById(R.id.search);
         listView = (ListView) findViewById(R.id.friends);
-        jumpToHome = (FloatingActionButton)findViewById(R.id.jumpToHome);
+        jumpToHome = (FloatingActionButton) findViewById(R.id.jumpToHome);
         addBtn = (FloatingActionButton) findViewById(R.id.add);
         relativeLayout = (RelativeLayout) findViewById(R.id.friendsAndFloat);
         searchList = (ListView) findViewById(R.id.searchList);
@@ -59,6 +61,8 @@ public class FriendsList extends AppCompatActivity {
         //填充listview
         simpleAdapter = new SimpleAdapter(this,getFriends(friends),R.layout.friend_item,
                 new String[]{"firstLetter","name"},new int[]{R.id.firstLetter,R.id.name});
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, getFriends(friends), R.layout.friend_item,
+                new String[]{"firstLetter", "name"}, new int[]{R.id.firstLetter, R.id.name});
         simpleAdapter.notifyDataSetChanged();
         listView.setAdapter(simpleAdapter);
 
@@ -138,6 +142,14 @@ public class FriendsList extends AppCompatActivity {
                 return false;
             }
         });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedItem = (String) adapterView.getItemAtPosition(i);
+                //todo link to friend_detail
+            }
+        });
+
 
     }
 

@@ -61,8 +61,6 @@ public class FriendsList extends AppCompatActivity {
         //填充listview
         simpleAdapter = new SimpleAdapter(this,getFriends(friends),R.layout.friend_item,
                 new String[]{"firstLetter","name"},new int[]{R.id.firstLetter,R.id.name});
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, getFriends(friends), R.layout.friend_item,
-                new String[]{"firstLetter", "name"}, new int[]{R.id.firstLetter, R.id.name});
         simpleAdapter.notifyDataSetChanged();
         listView.setAdapter(simpleAdapter);
 

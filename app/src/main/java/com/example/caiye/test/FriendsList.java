@@ -37,7 +37,7 @@ public class FriendsList extends AppCompatActivity {
         setContentView(R.layout.friendslist);
 
         searchView = (SearchView) findViewById(R.id.search);
-        listView = (ListView) findViewById(R.id.listview);
+        listView = (ListView) findViewById(R.id.friends);
         jumpToHome = (FloatingActionButton)findViewById(R.id.jumpToHome);
         addBtn = (FloatingActionButton) findViewById(R.id.add);
         relativeLayout = (RelativeLayout) findViewById(R.id.friendsAndFloat);
@@ -117,6 +117,7 @@ public class FriendsList extends AppCompatActivity {
         searchList.setAdapter(sAdapter);
     }
 
+    //构造adapter需要
     private List<Map<String,String>> getFriends(ArrayList<Person> friend){
         List<Map<String,String>> list = new ArrayList<Map<String,String>>();
 

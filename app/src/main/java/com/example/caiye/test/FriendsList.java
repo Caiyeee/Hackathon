@@ -1,16 +1,25 @@
 package com.example.caiye.test;
 
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +39,7 @@ public class FriendsList extends AppCompatActivity {
     private RelativeLayout relativeLayout;
     private ListView searchList;
     private DBOperation dbOperation;
+    private SimpleAdapter simpleAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +57,7 @@ public class FriendsList extends AppCompatActivity {
         dbOperation = new DBOperation(this);
         friends = dbOperation.getAllFriends();
         //填充listview
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this,getFriends(friends),R.layout.friend_item,
+        simpleAdapter = new SimpleAdapter(this,getFriends(friends),R.layout.friend_item,
                 new String[]{"firstLetter","name"},new int[]{R.id.firstLetter,R.id.name});
         simpleAdapter.notifyDataSetChanged();
         listView.setAdapter(simpleAdapter);
@@ -71,7 +81,36 @@ public class FriendsList extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                LayoutInflater factory = LayoutInflater.from(FriendsList.this);
+                View newView = factory.inflate(R.layout.dialog,null);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(FriendsList.this);
+                final EditText nameInput = (EditText) newView.findViewById(R.id.nameInput);
+                final EditText tagsInput = (EditText) newView.findViewById(R.id.tagsInput);
+                dialog.setView(newView);
+                dialog.setTitle("新增朋友");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(nameInput.length()==0)
+                            Toast.makeText(getApplicationContext(),"姓名不能為空",Toast.LENGTH_SHORT);
+                        else {
+                            ArrayList<Person> persons = dbOperation.queryName(nameInput.getText().toString());
+                            if(persons!=null && persons.size()!=0)
+                                Toast.makeText(getApplicationContext(),"該名字已被添加過",Toast.LENGTH_SHORT);
+                            else {
+                                String name = nameInput.getText().toString();
+                                String tags = tagsInput.getText().toString();
+                                int id = dbOperation.insert(name,tags);
+                                Person person = new Person(id,name,tags);
+                                friends.add(person);
+                                simpleAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                });
+                dialog.setNegativeButton("取消", null);
+                dialog.create().show();
             }
         });
 

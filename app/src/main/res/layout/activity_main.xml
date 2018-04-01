@@ -13,7 +13,7 @@
         android:id="@+id/constraint"
         android:layout_marginBottom="10dp"
         android:paddingTop="5dp"
-        android:background="#eee"
+        android:background="#abcdef"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp">
         <TextView
@@ -83,6 +83,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/youandme"
             android:id="@+id/youandme" />
+
 
         <ListView
             android:layout_width="wrap_content"

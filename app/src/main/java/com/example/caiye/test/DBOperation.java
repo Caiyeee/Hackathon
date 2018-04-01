@@ -14,14 +14,13 @@ public class DBOperation {
         dbHelper = new DBHelper(context);
     }
 
-    public int insert(Person person){
+    public int insert(String name,String tags_init){
         //打开连接，写入数据
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put("name",person.getName());
-        values.put("tags_init",person.getTags_init());
-        values.put("tags_add",person.getTags_add());
+        values.put("name",name);
+        values.put("tags_init",tags_init);
         long ID = db.insert("FRIENDS",null,values);
         db.close();
         return (int)ID;
@@ -44,6 +43,24 @@ public class DBOperation {
 
         db.update("FEIENDS",values,"id=?",new String[]{ String.valueOf(person.getId())});
         db.close();
+    }
+
+    public ArrayList<Person> queryName(String name){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.query("FRIENDS",null,"name=?",new String[]{name},null,null,null);
+        ArrayList<Person>  arrayList = new ArrayList<Person>();
+        if(cursor.moveToFirst()){
+            do{
+                Person person = new Person();
+                person.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                person.setName(cursor.getString(cursor.getColumnIndex("name")));
+                person.setTags_init(cursor.getString(cursor.getColumnIndex("tags_init")));
+                person.addTags_add(cursor.getString(cursor.getColumnIndex("tags_add")));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return arrayList;
     }
 
     public ArrayList<Person> query(String keyword){

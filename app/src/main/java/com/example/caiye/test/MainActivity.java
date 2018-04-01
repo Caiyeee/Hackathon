@@ -75,8 +75,14 @@ public class MainActivity extends AppCompatActivity {
             getTag = intentToShow.getStringExtra("tags_init");
         }
 
+        if(getTag==null)
+            tags.setText("您沒有對這位朋友設置標籤喔！");
+        else
+            tags.setText(getTag);
+
         if(getName==null){
             name.setText("None");
+            tags.setText("請先到朋友列表選擇朋友喔！");
             youandme.setAlpha(255);
         } else {
             name.setText(getName);
@@ -85,10 +91,7 @@ public class MainActivity extends AppCompatActivity {
             /////////////////////////////////////////////////////////////////////
         }
 
-        if(getTag==null)
-            tags.setText("您沒有對這位朋友設置標籤喔！");
-        else
-            tags.setText(getTag);
+
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(this,recommend,R.layout.friend_item,
                 new String[]{"title",""},new int[]{R.id.firstLetter,R.id.name});

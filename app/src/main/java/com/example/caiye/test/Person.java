@@ -53,12 +53,12 @@ public class Person {
         this.name = name;
     }
     public void setTags_init(String a){
-        if(!a.isEmpty()){
+        if(a!=null){
             this.tags_init = a;
         }
     }
     public void addTags_add(String a){
-        if(!a.isEmpty()){
+        if(a!=null){
             this.tags_add += a;
         }
     }

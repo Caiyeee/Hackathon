@@ -26,6 +26,7 @@ import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView youandme;
     private Intent intentToShow;
     private Person person;
-    private List<Map<String,String>> recommend;
+    private List<Map<String, String>> recommend;
     private SimpleAdapter simpleAdapter;
     private String getName;
     private String getTag;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         recommend = new ArrayList<Map<String, String>>();
         name = (TextView) findViewById(R.id.name_now);
-        tags = (TextView)findViewById(R.id.tags);
+        tags = (TextView) findViewById(R.id.tags);
         youandme = (ImageView) findViewById(R.id.youandme);
         btnRecorder = (Button) findViewById(R.id.btn_record);
         btnRecorderEnd = (Button) findViewById(R.id.btn_end);
@@ -75,12 +76,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         intentToShow = getIntent();
-        if(intentToShow!=null){
-            getName = intentToShow.getStringExtra("name");
-            getTag = intentToShow.getStringExtra("tags_init");
+        person = (Person) intentToShow.getSerializableExtra("Person");
+        if (person != null) {
+            getName = person.getName();
+            getTag = person.getTags_init() + person.getTags_add();
         }
 
-        if(getName==null){
+        if (getName == null) {
             name.setText("None");
             youandme.setAlpha(255);
         } else {
@@ -90,13 +92,13 @@ public class MainActivity extends AppCompatActivity {
             /////////////////////////////////////////////////////////////////////
         }
 
-        if(getTag==null)
+        if (getTag == null)
             tags.setText("您沒有對這位朋友設置標籤喔！");
         else
             tags.setText(getTag);
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this,recommend,R.layout.friend_item,
-                new String[]{"title",""},new int[]{R.id.firstLetter,R.id.name});
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, recommend, R.layout.friend_item,
+                new String[]{"title", ""}, new int[]{R.id.firstLetter, R.id.name});
         simpleAdapter.notifyDataSetChanged();
         listView.setAdapter(simpleAdapter);
 
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         jumpToFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,FriendsList.class);
+                Intent intent = new Intent(MainActivity.this, FriendsList.class);
                 startActivity(intent);
             }
         });
@@ -122,13 +124,15 @@ public class MainActivity extends AppCompatActivity {
         btnRecorderEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String retString = "";
+                String retString = "000";
                 List<String> sentenceList = HanLP.extractKeyword(fullText, 5);
                 for (String item : sentenceList) {
                     retString = retString + item + ",";
                 }
                 retString = retString.substring(0, retString.length() - 1) + ";";
                 //todo to show the keyword
+                Map<String, String> temMap = new HashMap<String, String>();
+                temMap.put("keyword", retString);
                 Log.d(TAG, "onClick: ");
             }
         });
@@ -144,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.setListener(new RecognizerDialogListener() {
             @Override
             public void onResult(RecognizerResult recognizerResult, boolean isLast) {
-                Log.d(TAG, "onResult: " + 222);
                 if (!isLast) {
                     //解析语音
                     String result = parseVoice(recognizerResult.getResultString());
